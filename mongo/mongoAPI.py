@@ -52,7 +52,7 @@ def get_db(name="Aerial"):
         client = get_client()
         db = client.get_database(name)
     except Exception as e:
-        log_utils.log_msg_error(logger=logger, key='MONGOAPI0001', msg=name, values={"Exception": e.message})
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0001', msg=name, exception=e)
         return None
     return db
 
@@ -72,11 +72,13 @@ def get_collections(db=None):
         return None
 
     # Collections name
-    soybeans = db.soybeans
+    soybeans_county = db.soybeans_county
+    soybeans_state = db.soybeans_state
     weathers = db.candidate_files
 
     collections = {
-        'soybeans': soybeans,
+        'soybeans_county': soybeans_county,
+        'soybeans_state': soybeans_state,
         'weathers': weathers,
 
     }
@@ -98,29 +100,29 @@ def insert_one_document(collection=None, document=None):
 
     """
     if collection is None or document is None:
-        log_utils.log_msg_error(logger=logger, key='M002', msg='No collection name to insert document',
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0003', msg='No collection name to insert document',
                                 values={'collection': collection, 'doc': document})
         return -1
 
     try:
         id = collection.insert_one(document).inserted_id
     except TypeError as te:
-        log_utils.log_msg_error(logger=logger, key='M003', msg='Failed to insert one document',
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0004', msg='Failed to insert one document',
                                 values={'collection': collection, 'doc': document}, exception=te)
         id = -1
 
     except NetworkTimeout as nt:
-        log_utils.log_msg_error(logger=logger, key='M004', msg='Failed to insert one document',
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0005', msg='Failed to insert one document',
                                 values={'collection': collection, 'doc': document}, exception=nt)
         id = -1
 
     except ConnectionFailure as cf:
-        log_utils.log_msg_error(logger=logger, key='M005', msg='Failed to insert one document',
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0006', msg='Failed to insert one document',
                                 values={'collection': collection, 'doc': document}, exception=cf)
         id = -1
 
     except DuplicateKeyError as dke:
-        log_utils.log_msg_error(logger=logger, key='M006', msg='Failed to insert one document',
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0007', msg='Failed to insert one document',
                                 values={'collection': collection, 'doc': document}, exception=dke)
         id = -1
 
@@ -142,11 +144,11 @@ def get_one_document(collection=None, query=None):
 
     """
     if collection is None:
-        log_utils.log_msg_info(logger=logger, key='M013', msg='Missing collection name to get one document',
+        log_utils.log_msg_info(logger=logger, key='MONGOAPI0008', msg='Missing collection name to get one document',
                                values={'collection': collection, 'doc': query}, exception="")
         return None
     if query is None:
-        log_utils.log_msg_info(logger=logger, key='M014', msg='Missing query info to get one document',
+        log_utils.log_msg_info(logger=logger, key='MONGOAPI0009', msg='Missing query info to get one document',
                                values={'collection': collection, 'doc': query}, exception="")
         return None
 
@@ -155,17 +157,17 @@ def get_one_document(collection=None, query=None):
         document = collection.find_one(query)
 
     except TypeError as te:
-        log_utils.log_msg_error(logger=logger, key='M015', msg='Failed to retrieve one document',
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0010', msg='Failed to retrieve one document',
                                 values={'collection': collection, 'doc': document}, exception=te)
         return None
 
     except NetworkTimeout as nt:
-        log_utils.log_msg_error(logger=logger, key='M016', msg='Failed to retrieve one document',
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0011', msg='Failed to retrieve one document',
                                 values={'collection': collection, 'doc': document}, exception=nt)
         return None
 
     except ConnectionFailure as cf:
-        log_utils.log_msg_error(logger=logger, key='M017', msg='Failed to retrieve one document',
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0012', msg='Failed to retrieve one document',
                                 values={'collection': collection, 'doc': document}, exception=cf)
         return None
 
@@ -182,7 +184,7 @@ def get_all_document(collection=None):
 
     """
     if collection is None:
-        log_utils.log_msg_error(logger=logger, key='M036', msg='Missing collection to retrieve all document',
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0013', msg='Missing collection to retrieve all document',
                                 values={'collection': collection}, exception="")
         return None
 
@@ -193,17 +195,17 @@ def get_all_document(collection=None):
 
     except TypeError as te:
         traceback.print_exc()
-        log_utils.log_msg_error(logger=logger, key='M037', msg='Failed to Retrieve all documents',
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0014', msg='Failed to Retrieve all documents',
                                 values={'collection': collection}, exception=te)
 
     except NetworkTimeout as nt:
         traceback.print_exc()
-        log_utils.log_msg_error(logger=logger, key='M038', msg='Failed to Retrieve document',
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0015', msg='Failed to Retrieve document',
                                 values={'collection': collection}, exception=nt)
 
     except ConnectionFailure as cf:
         traceback.print_exc()
-        log_utils.log_msg_error(logger=logger, key='M039', msg='Failed to Retrieve all documents',
+        log_utils.log_msg_error(logger=logger, key='MONGOAPI0016', msg='Failed to Retrieve all documents',
                                 values={'collection': collection}, exception=cf)
 
     return documents
