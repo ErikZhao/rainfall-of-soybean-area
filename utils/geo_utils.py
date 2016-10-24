@@ -36,7 +36,7 @@ def get_location_from_geopy(location=None):
         lat = location_info.latitude
         lon = location_info.longitude
     except Exception as e:
-        log_utils.log_msg_error(logger=logger, key='GEOUTILS0002', msg='',
+        log_utils.log_msg_error(logger=logger, key='GEOUTILS0002', msg='Get geo code Error',
                                 values={"Location not found": location}, exception=e)
 
     return lat, lon
