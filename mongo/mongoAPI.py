@@ -74,7 +74,7 @@ def get_collections(db=None):
     # Collections name
     soybeans_county = db.soybeans_county
     soybeans_state = db.soybeans_state
-    weathers = db.candidate_files
+    weathers = db.weathers
 
     collections = {
         'soybeans_county': soybeans_county,

@@ -9,6 +9,8 @@ from download import download
 from mongo import mongoAPI
 from utils import log_utils
 
+from geopy.geocoders import GoogleV3
+
 __author__ = "linghanzhao"
 __created__ = "10/22/16"
 
@@ -66,3 +68,4 @@ def store_production_to_db(url, collection):
 
 # store_production_to_db(SOYBEAN_COUNTY_URL, collections['soybeans_county'])
 # store_production_to_db(SOYBEAN_STATE_URL, collections['soybeans_state'])
+

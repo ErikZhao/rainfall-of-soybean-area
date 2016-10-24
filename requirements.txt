@@ -1,0 +1,8 @@
+# mongo
+pymongo
+
+# darksky
+forecastio
+
+# geo
+geopy
