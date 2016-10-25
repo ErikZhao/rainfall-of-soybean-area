@@ -6,3 +6,6 @@ python-forecastio
 
 # geo
 geopy
+
+# flask
+flask
