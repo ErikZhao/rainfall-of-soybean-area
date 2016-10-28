@@ -1,5 +1,6 @@
 # coding=utf-8
 
+import pymongo
 import flask
 import datetime
 from flask import Flask, request
@@ -46,12 +47,22 @@ def get_parameters():
 
                 result.append((each['state_name'], rain_fall))
         elif filter.lower() == 'county':
-            data = mongoAPI.get_all_document(collections["soybeans_county"])
+            data = db.soybeans_county.find().limit(50)
             for each in data:
                 lat = each['geo_location']['lat']
                 lon = each['geo_location']['lon']
-                # rain_fall = darkskyAPI.get_today_rain_fall(lat, lon)
-                result.append((each['county_name'], 1))
+                county_name = each['county_name']
+                today = datetime.datetime.now().date()
+
+                weather_document = mongoAPI.get_one_document(collections["weathers"], {'date': str(today), 'county_name': county_name})
+                if weather_document:
+                    rain_fall = weather_document['rain_fall']
+                else:
+                    rain_fall = darkskyAPI.get_today_rain_fall(lat, lon)
+                    mongoAPI.insert_one_document(collections["weathers"], {'date': str(today), 'county_name': county_name, 'rain_fall': rain_fall})
+
+                result.append((each['county_name'], rain_fall))
+
         else:
             pass
 

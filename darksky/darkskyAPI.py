@@ -51,4 +51,4 @@ def get_today_rain_fall(lat, lon, time=datetime.datetime.now()):
 
 # 40.0583238, -74.4056612
 
-print get_today_rain_fall(40.0583238, -74.4056612)
+# print get_today_rain_fall(32.3334722, -87.4166652)
